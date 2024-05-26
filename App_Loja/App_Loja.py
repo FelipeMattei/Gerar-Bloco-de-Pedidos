@@ -22,9 +22,23 @@ def colocar_texto_float(imagem,entrada2,x,y,tamanho):
     escrever.text((x,y), entrada2, font=fonte,  fill=(0,0,0))
 
     return imagem
-    
-    
 
+def calcular_final(quantidade,valor):
+
+    for contador in range(len(quantidade)):
+
+        quantidade_float = float(quantidade[contador])
+        valor_float = float(valor[contador])
+
+        soma = quantidade_float * valor_float
+        soma_str = str(soma)
+
+        Label(tela, text=f"Valor total R$:{soma_str}").grid(row=(9+contador), column=7, sticky=W)
+
+        soma_total = soma_total + soma
+
+
+    
 def botao():
 
     imagem =  Image.open('App_Loja/Vieira_nota.jpg')
@@ -47,32 +61,17 @@ def botao():
     entrada6 = entrada_cpf.get()
     colocar_texto_string(imagem, entrada6, 100, 398, 35)
 
-    entrada7 = entrada_quant_iten.get()
-    colocar_texto_float(imagem,entrada7, 40, 492, 35)
-    
-    entrada8 = entrada_nome_iten.get()
-    colocar_texto_string(imagem, entrada8, 160, 492, 35)
-
-    entrada9 = entrada_valor_iten.get()
-    colocar_texto_float(imagem, entrada9, 790, 492, 35)
-
-    entrada7_float = float(entrada7)
-    entrada9_float = float(entrada9)
-    valor_total = entrada7_float * entrada9_float
-    valor_total_str = str(valor_total)
-    
-    Label(tela, text = f" Valor Total: R$ {valor_total}").grid(row=9, column=6, sticky=W)
-    colocar_texto_float(imagem, valor_total_str, 940, 492, 35)
+    calcular_final(entrada_quant_iten,entrada_valor_iten)
 
     imagem.save("Imagem_edit.jpg")
-    
+
+
 
 tela = Tk()
 tela.title("Gerar Nota")
-tela.geometry("800x300+600+350")
+tela.geometry("800x500+600+350")
 tela.iconbitmap("App_Loja/icon.ico")
 
-#tela.minsize(width=500,height=300)
 tela.resizable(True,True)
 
 Label(tela, text= "Informações Pedido:").grid(row=0, sticky=W)
@@ -105,23 +104,43 @@ entrada_cpf.grid(row=7, column=1)
 
 Label(tela, text = "\nInformações Itens: ").grid(row=8, sticky=W)
 
-Label(tela, text = "Quantidade: ").grid(row=9, column=0, sticky=W)
-entrada_quant_iten = Entry(tela)
-entrada_quant_iten.grid(row=9, column=1)
 
-Label(tela, text = " Nome Item: ").grid(row=9, column=2, sticky=W)
-entrada_nome_iten = Entry(tela)
-entrada_nome_iten.grid(row=9, column=3)
+###    Laço de repetição para criar vários Labels, que seriam as linhas e colunas para colocar os produtos.
 
-Label(tela, text = " Valor Unidade R$: ").grid(row=9, column=4, sticky=W)
-entrada_valor_iten = Entry(tela)
-entrada_valor_iten.grid(row=9, column=5)
 
-Label(tela, text = "\nFinalizar: ").grid(row=10, sticky=W)
+entrada_quant_iten = []
+entrada_valor_iten = []
+
+
+for contador in range(9):
+
+    Label(tela, text = "Quantidade: ").grid(row=(9+contador), column=0, sticky=W)
+    quant_iten = Entry(tela)
+    entrada_quant_iten.append(quant_iten)
+    entrada_quant_iten[contador].grid(row=(9+contador), column=1)
+    entrada_quant_iten[contador] = entrada_quant_iten[contador].get()
+        
+
+    Label(tela, text = " Nome Item: ").grid(row=(9+contador), column=2, sticky=W)
+    entrada_nome_iten = Entry(tela)
+    entrada_nome_iten.grid(row=(9+contador), column=3)
+
+    Label(tela, text = " Valor Unidade R$: ").grid(row=(9+contador), column=4, sticky=W)
+    valor_iten = Entry(tela)
+    entrada_valor_iten.append(valor_iten)
+    entrada_valor_iten[contador].grid(row=(9+contador), column=5)
+    entrada_valor_iten[contador] = entrada_valor_iten[contador].get()
+
+
+
+# if soma_total != 0:
+#     str(soma_total)
+#     Label(tela, text = "\nFinalizar: ").grid(row=22, sticky=W)
+#     Label(tela, text=f"Total da compra:{soma_total}").grid(row=23)
 
 
 
 botaosalvar = Button(tela, text="Salvar", command=botao)
-botaosalvar.grid(row=11, column=3)
+botaosalvar.grid(row=24, column=3)
 
 tela.mainloop()
