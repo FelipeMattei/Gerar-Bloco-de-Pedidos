@@ -31,7 +31,7 @@ def calcular_final():
 
         soma_total=0
 
-        for i in range(9):
+        for i in range(19):
 
             qtd = entrada_quant_iten[i].get()
             val = entrada_valor_iten[i].get()
@@ -59,34 +59,34 @@ def limpar_resultados():
     
 def botao():
 
-    imagem =  Image.open('App_Loja/Vieira_nota.jpg')
+    imagem =  Image.open('App_Loja/Vieira_nota.png')
 
     entrada1 = entrada_tipop.get()
-    colocar_texto(imagem, entrada1, 800, 75, 35)
+    colocar_texto(imagem, entrada1, 800, 73, 35)
    
     entrada2 = entrada_datap.get()
-    colocar_texto(imagem, entrada2, 800, 250, 35)
+    colocar_texto(imagem, entrada2, 800, 247, 35)
 
     entrada3 = entrada_nome.get()
-    colocar_texto(imagem, entrada3, 140, 305, 35)
+    colocar_texto(imagem, entrada3, 140, 302, 35)
 
     entrada4 = entrada_end.get()
-    colocar_texto(imagem, entrada4, 120, 350, 35)
+    colocar_texto(imagem, entrada4, 120, 347, 35)
 
     entrada5 = entrada_fone.get()
-    colocar_texto(imagem, entrada5, 800, 350, 35)
+    colocar_texto(imagem, entrada5, 800, 347, 35)
 
     entrada6 = entrada_cpf.get()
-    colocar_texto(imagem, entrada6, 100, 398, 35)
+    colocar_texto(imagem, entrada6, 100, 395, 35)
     
 
     # entrada7 = entrada_quant_iten[0].get()
     # colocar_texto_float(imagem, entrada7, 50, 493, 35)
-    # entrada8 = entrada_quant_iten[1].get()
-    # colocar_texto_float(imagem, entrada7, 50, 530, 35)
+    # entrada8 = entrada_quant_iten[2].get()
+    # colocar_texto_float(imagem, entrada8, 50, 604, 35)
 
     entrada = []
-    for i in range(9):
+    for i in range(19):
 
         entradas = entrada_quant_iten[i].get()
         entrada.append(entradas)
@@ -95,12 +95,11 @@ def botao():
     calcular_final()
 
 
-    imagem.save("Imagem_edit.jpg")
+    imagem.save("App_Loja/Nota_edit.png")
 
 
 tela = Tk()
 tela.title("Gerar Nota")
-tela.geometry("800x500+600+350")
 tela.iconbitmap("App_Loja/icon.ico")
 
 tela.resizable(True,True)
@@ -142,7 +141,7 @@ entrada_valor_iten = []
 resultados = []
 
 
-for contador in range(9):
+for contador in range(19):
     
     Label(tela, text = "Quantidade: ").grid(row=(9+contador), column=0, sticky=W)
     quant_iten = Entry(tela)
@@ -163,13 +162,14 @@ for contador in range(9):
     resultados.append(resultado_produto)
 
 
-Label(tela, text = "\nFinalizar: ").grid(row=22, sticky=W)
+Label(tela, text = "\nFinalizar: ", font=(12)).grid(row=32, sticky=W)
 
-resultado_final = Label(tela, text="")
-resultado_final.grid(row=23, column=2, sticky=W)
+resultado_final = Label(tela, text="", font=("Arial", 12))
+resultado_final.grid(row=33, column=0, sticky=W)
 
 
-botaosalvar = Button(tela, text="Salvar", command=botao)
-botaosalvar.grid(row=24, column=3)
+botaosalvar = Button(tela, text="Salvar", command=botao, width=15, height=3)
+botaosalvar.grid(row=34, column=2)
+
 
 tela.mainloop()
