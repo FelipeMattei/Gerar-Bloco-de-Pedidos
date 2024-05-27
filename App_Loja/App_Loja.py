@@ -5,6 +5,7 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
+
        
 def colocar_texto(imagem,entrada1,x,y,tamanho):
     
@@ -25,7 +26,7 @@ def colocar_texto_float(imagem,entrada,x,y,tamanho):
 
 
 def calcular_final():
-
+    global soma_total
     try:
         limpar_resultados()
 
@@ -41,12 +42,14 @@ def calcular_final():
 
             produto = qtd * val
 
-            resultados[i].config(text=f"Resultado R$:{produto}")
+            
+            resultados[i].config(text=f"R$:{produto}")
+            resultados[i] = produto
 
             soma_total += produto
 
         resultado_final.config(text=f"Valor total R$:{soma_total}")
-
+        
     except ValueError:
 
         resultado_final.config(text="Por favor, insira valores válidos!")
@@ -78,21 +81,35 @@ def botao():
 
     entrada6 = entrada_cpf.get()
     colocar_texto(imagem, entrada6, 100, 395, 35)
-    
 
-    # entrada7 = entrada_quant_iten[0].get()
-    # colocar_texto_float(imagem, entrada7, 50, 493, 35)
-    # entrada8 = entrada_quant_iten[2].get()
-    # colocar_texto_float(imagem, entrada8, 50, 604, 35)
-
-    entrada = []
+    entrada_qtd = []
     for i in range(19):
+        entradas_qtd = entrada_quant_iten[i].get()
+        entrada_qtd.append(entradas_qtd)
+        colocar_texto_float(imagem, entrada_qtd[i] ,50,493+(37*i),35)
+    
+    entrada_nm = []
+    for i in range(19):
+       entradas_nm = entrada_nome_iten[i].get()
+       entrada_nm.append(entradas_nm)
+       colocar_texto(imagem,entrada_nm[i], 200,493+(37*i),35)
 
-        entradas = entrada_quant_iten[i].get()
-        entrada.append(entradas)
-        colocar_texto_float(imagem, entrada[i] ,50,493+(37*i),35)
+    entrada_vlr = []
+    for i in range(19):
+        entradas_vlr = entrada_valor_iten[i].get()
+        entrada_vlr.append(entradas_vlr)
+        colocar_texto_float(imagem,entrada_vlr[i], 800,493+(37*i),35)
 
     calcular_final()
+
+    texto_resultado = []
+    for i in range(19):
+        textos = resultados[i]
+        texto_resultado.append(textos)
+        colocar_texto_float(imagem, texto_resultado[i],950,493+(37*i),35)
+
+    entrada7 = soma_total
+    colocar_texto_float(imagem,entrada7, 950,1205,35)
 
 
     imagem.save("App_Loja/Nota_edit.png")
@@ -139,6 +156,7 @@ Label(tela, text = "\nInformações Itens: ").grid(row=8, sticky=W)
 entrada_quant_iten = []
 entrada_valor_iten = []
 resultados = []
+entrada_nome_iten = []
 
 
 for contador in range(19):
@@ -149,8 +167,9 @@ for contador in range(19):
     entrada_quant_iten.append(quant_iten)
     
     Label(tela, text = " Nome Item: ").grid(row=(9+contador), column=2, sticky=W)
-    entrada_nome_iten = Entry(tela)
-    entrada_nome_iten.grid(row=(9+contador), column=3)
+    nome_iten = Entry(tela)
+    nome_iten.grid(row=(9+contador), column=3)
+    entrada_nome_iten.append(nome_iten)
 
     Label(tela, text = " Valor Unidade R$: ").grid(row=(9+contador), column=4, sticky=W)
     valor_iten = Entry(tela)
