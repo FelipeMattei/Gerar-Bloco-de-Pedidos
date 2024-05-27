@@ -6,7 +6,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 
        
-def colocar_texto_string(imagem,entrada1,x,y,tamanho):
+def colocar_texto(imagem,entrada1,x,y,tamanho):
     
     escrever = ImageDraw.Draw(imagem)
     fonte = ImageFont.truetype("App_Loja/CAMBRIA.TTC", tamanho)
@@ -14,14 +14,15 @@ def colocar_texto_string(imagem,entrada1,x,y,tamanho):
 
     return imagem
 
-
-def colocar_texto_float(imagem,entrada2,x,y,tamanho):
+def colocar_texto_float(imagem,entrada,x,y,tamanho):
 
     escrever = ImageDraw.Draw(imagem)
     fonte = ImageFont.truetype("App_Loja/CAMBRIA.TTC", tamanho)
-    escrever.text((x,y), entrada2, font=fonte,  fill=(0,0,0))
+    entrada_str = str(entrada)
+    escrever.text((x,y), entrada_str, font=fonte,  fill=(0,0,0))
 
     return imagem
+
 
 def calcular_final():
 
@@ -38,7 +39,6 @@ def calcular_final():
             qtd = float(qtd) if qtd else 0
             val = float(val) if val else 0
 
-
             produto = qtd * val
 
             resultados[i].config(text=f"Resultado R$:{produto}")
@@ -51,38 +51,51 @@ def calcular_final():
 
         resultado_final.config(text="Por favor, insira valores válidos!")
 
-    
+
 def limpar_resultados():
     for label in resultados:
         label.config(text="")      
         
-
     
 def botao():
 
     imagem =  Image.open('App_Loja/Vieira_nota.jpg')
 
     entrada1 = entrada_tipop.get()
-    colocar_texto_string(imagem, entrada1, 800, 75, 35)
+    colocar_texto(imagem, entrada1, 800, 75, 35)
    
     entrada2 = entrada_datap.get()
-    colocar_texto_string(imagem, entrada2, 800, 250, 35)
+    colocar_texto(imagem, entrada2, 800, 250, 35)
 
     entrada3 = entrada_nome.get()
-    colocar_texto_string(imagem, entrada3, 140, 305, 35)
+    colocar_texto(imagem, entrada3, 140, 305, 35)
 
     entrada4 = entrada_end.get()
-    colocar_texto_string(imagem, entrada4, 120, 350, 35)
+    colocar_texto(imagem, entrada4, 120, 350, 35)
 
     entrada5 = entrada_fone.get()
-    colocar_texto_string(imagem, entrada5, 800, 350, 35)
+    colocar_texto(imagem, entrada5, 800, 350, 35)
 
     entrada6 = entrada_cpf.get()
-    colocar_texto_string(imagem, entrada6, 100, 398, 35)
+    colocar_texto(imagem, entrada6, 100, 398, 35)
+    
+
+    # entrada7 = entrada_quant_iten[0].get()
+    # colocar_texto_float(imagem, entrada7, 50, 493, 35)
+    # entrada8 = entrada_quant_iten[1].get()
+    # colocar_texto_float(imagem, entrada7, 50, 530, 35)
+
+    entrada = []
+    for i in range(9):
+
+        entradas = entrada_quant_iten[i].get()
+        entrada.append(entradas)
+        colocar_texto_float(imagem, entrada[i] ,50,493+(37*i),35)
 
     calcular_final()
 
-    #imagem.save("Imagem_edit.jpg")
+
+    imagem.save("Imagem_edit.jpg")
 
 
 tela = Tk()
