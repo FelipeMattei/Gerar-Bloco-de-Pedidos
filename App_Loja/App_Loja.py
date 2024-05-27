@@ -1,10 +1,12 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog, messagebox
 
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
 
        
 def colocar_texto(imagem,entrada1,x,y,tamanho):
@@ -14,6 +16,7 @@ def colocar_texto(imagem,entrada1,x,y,tamanho):
     escrever.text((x,y), entrada1, font=fonte,  fill=(0,0,0))
 
     return imagem
+
 
 def colocar_texto_float(imagem,entrada,x,y,tamanho):
 
@@ -27,9 +30,12 @@ def colocar_texto_float(imagem,entrada,x,y,tamanho):
 
 def calcular_final():
     global soma_total
+    global resultados_nume
+
     try:
         limpar_resultados()
 
+        resultados_nume = []
         soma_total=0
 
         for i in range(19):
@@ -41,10 +47,10 @@ def calcular_final():
             val = float(val) if val else 0
 
             produto = qtd * val
+            produto = round(produto, 2)
 
-            
             resultados[i].config(text=f"R$:{produto}")
-            resultados[i] = produto
+            resultados_nume.append(produto)
 
             soma_total += produto
 
@@ -56,10 +62,26 @@ def calcular_final():
 
 
 def limpar_resultados():
-    for label in resultados:
-        label.config(text="")      
-        
     
+    for label in resultados:
+        label.config(text="") 
+  
+
+def salvar_pdf(imagem):
+        resposta = messagebox.askyesno("Salvar como PDF", "Você quer salvar a imagem como PDF?")
+        if resposta:
+            caminho_pdf = filedialog.asksaveasfilename(defaultextension=".pdf",filetypes=[("PDF files", "*.pdf")],title="Salvar PDF como")
+            if caminho_pdf:
+                c = canvas.Canvas(caminho_pdf, pagesize=A4)
+                c.drawImage(imagem, 0, 0, width=A4[0], height=A4[1])
+                c.showPage()
+                c.save()
+                
+                messagebox.showinfo("Sucesso", "Imagem salva como PDF com sucesso!")
+        else:
+            messagebox.showinfo("Continuar", "Você escolheu não salvar como PDF. Continue editando a imagem.")
+
+
 def botao():
 
     imagem =  Image.open('App_Loja/Vieira_nota.png')
@@ -101,23 +123,26 @@ def botao():
         colocar_texto_float(imagem,entrada_vlr[i], 800,493+(37*i),35)
 
     calcular_final()
-
     texto_resultado = []
+
     for i in range(19):
-        textos = resultados[i]
+        textos = resultados_nume[i]
         texto_resultado.append(textos)
         colocar_texto_float(imagem, texto_resultado[i],950,493+(37*i),35)
 
     entrada7 = soma_total
     colocar_texto_float(imagem,entrada7, 950,1205,35)
 
+    imagem_editada = "App_Loja/Nota_edit.png"
+    imagem.save(imagem_editada)
 
-    imagem.save("App_Loja/Nota_edit.png")
+    salvar_pdf(imagem_editada)
 
 
 tela = Tk()
 tela.title("Gerar Nota")
 tela.iconbitmap("App_Loja/icon.ico")
+tela.geometry("+550+200")
 
 tela.resizable(True,True)
 
@@ -159,6 +184,8 @@ resultados = []
 entrada_nome_iten = []
 
 
+
+
 for contador in range(19):
     
     Label(tela, text = "Quantidade: ").grid(row=(9+contador), column=0, sticky=W)
@@ -181,14 +208,13 @@ for contador in range(19):
     resultados.append(resultado_produto)
 
 
-Label(tela, text = "\nFinalizar: ", font=(12)).grid(row=32, sticky=W)
+Label(tela, text = "\nFinalizar: ", font=(12)).grid(row=31, sticky=W)
 
-resultado_final = Label(tela, text="", font=("Arial", 12))
-resultado_final.grid(row=33, column=0, sticky=W)
+resultado_final = Label(tela, text="", font=(12), bg="#FFFFFF")
+resultado_final.grid(row=31, column=5, sticky=W)
 
-
-botaosalvar = Button(tela, text="Salvar", command=botao, width=15, height=3)
-botaosalvar.grid(row=34, column=2)
+botaosalvar = Button(tela, text="Salvar", command=botao, width=15, height=3, bg= "#FFFFFF")
+botaosalvar.grid(row=33, column=2)
 
 
 tela.mainloop()
