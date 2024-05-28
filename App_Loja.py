@@ -7,24 +7,28 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
+import os
+import sys
 
        
-def colocar_texto(imagem,entrada1,x,y,tamanho):
-    
-    escrever = ImageDraw.Draw(imagem)
-    fonte = ImageFont.truetype("App_Loja/CAMBRIA.TTC", tamanho)
-    escrever.text((x,y), entrada1, font=fonte,  fill=(0,0,0))
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
+def colocar_texto(imagem, entrada1, x, y, tamanho):
+    escrever = ImageDraw.Draw(imagem)
+    fonte = ImageFont.truetype(resource_path("CAMBRIA.TTC"), tamanho)
+    escrever.text((x, y), entrada1, font=fonte, fill=(0, 0, 0))
     return imagem
 
-
-def colocar_texto_float(imagem,entrada,x,y,tamanho):
-
+def colocar_texto_float(imagem, entrada, x, y, tamanho):
     escrever = ImageDraw.Draw(imagem)
-    fonte = ImageFont.truetype("App_Loja/CAMBRIA.TTC", tamanho)
+    fonte = ImageFont.truetype(resource_path("CAMBRIA.TTC"), tamanho)
     entrada_str = str(entrada)
-    escrever.text((x,y), entrada_str, font=fonte,  fill=(0,0,0))
-
+    escrever.text((x, y), entrada_str, font=fonte, fill=(0, 0, 0))
     return imagem
 
 
@@ -59,7 +63,7 @@ def calcular_final():
     except ValueError:
 
         resultado_final.config(text="Por favor, insira valores válidos!")
-
+        messagebox.showinfo("Continuar", "Por favor insira valores válidos")
 
 def limpar_resultados():
     
@@ -84,7 +88,7 @@ def salvar_pdf(imagem):
 
 def botao():
 
-    imagem =  Image.open('App_Loja/Vieira_nota.png')
+    imagem = Image.open(resource_path('Vieira_nota.png'))
 
     entrada1 = entrada_tipop.get()
     colocar_texto(imagem, entrada1, 800, 73, 35)
@@ -133,7 +137,7 @@ def botao():
     entrada7 = soma_total
     colocar_texto_float(imagem,entrada7, 950,1205,35)
 
-    imagem_editada = "App_Loja/Nota_edit.png"
+    imagem_editada = resource_path("Nota_edit.png")
     imagem.save(imagem_editada)
 
     salvar_pdf(imagem_editada)
@@ -141,7 +145,6 @@ def botao():
 
 tela = Tk()
 tela.title("Gerar Nota")
-tela.iconbitmap("App_Loja/icon.ico")
 tela.geometry("+550+200")
 
 tela.resizable(True,True)
@@ -155,7 +158,7 @@ entrada_tipop.grid(row=1, column=1)
 Label(tela, text = "Data Pedido: ").grid(row=2, sticky=W)
 entrada_datap = Entry(tela)
 entrada_datap.grid(row=2, column=1)
-
+ 
 Label(tela, text= "\nInformações Comprador:").grid(row=3, sticky=W)
 
 Label(tela, text = "Nome: ").grid(row=4, sticky=W)
@@ -182,8 +185,6 @@ entrada_quant_iten = []
 entrada_valor_iten = []
 resultados = []
 entrada_nome_iten = []
-
-
 
 
 for contador in range(19):
